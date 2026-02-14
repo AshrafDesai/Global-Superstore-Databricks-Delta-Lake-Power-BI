@@ -34,8 +34,7 @@ Gold Layer (Star Schema)
 ↓
 Power BI Dashboard
 
-
----
+```
 
 ## 🛠 Tech Stack
 
@@ -222,7 +221,8 @@ Clean, query-ready dataset for dimensional modeling.
 
 # 📐 DAX Measures Used
 
-```DAX
+```
+DAX
 Total Sales = SUM(fact_sales[sales])
 
 Total Profit = SUM(fact_sales[profit])
@@ -254,6 +254,6 @@ Avg Discount = AVERAGE(fact_sales[discount])
 
 * Data Quality Handling
 
-** Author **
-** Asharafraza Desai **
-Data Engineer | Analytics Engineer | BI Developer
+**Author:** 
+Asharafraza Desai  
+Data Engineer | Analytics Engineer | BI Developer  
