@@ -191,6 +191,8 @@ Clean, query-ready dataset for dimensional modeling.
 - Profit by Region
 - Monthly Sales Trend
 
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/260c0b8e-3d0b-446e-94a0-eac64a88aa69" />
+
 ---
 
 ## Page 2 — Product Performance
@@ -203,6 +205,8 @@ Clean, query-ready dataset for dimensional modeling.
 - Identified high-revenue categories
 - Detected margin erosion due to discounting
 - Highlighted high-margin products
+- 
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/dc34d6fe-6f7d-4fa3-8e0d-444b6489ecc1" />
 
 ---
 
@@ -216,6 +220,8 @@ Clean, query-ready dataset for dimensional modeling.
 - Customer segmentation performance
 - VIP customer identification
 - Regional demand patterns
+
+<img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/dbb6338c-fb68-4ea5-bf3d-06114e68d665" />
 
 ---
 
