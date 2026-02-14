@@ -1,0 +1,4 @@
+CREATE CATALOG superstore_catalog;
+CREATE SCHEMA superstore_catalog.superstore_db;
+USE superstore_catalog.superstore_db;
+CREATE VOLUME superstore_volume;

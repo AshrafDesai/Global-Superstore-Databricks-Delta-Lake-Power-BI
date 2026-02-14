@@ -1,0 +1,26 @@
+--Facte Table
+
+CREATE OR REPLACE TABLE superstore_catalog.superstore_db.fact_sales
+USING DELTA
+AS
+SELECT
+    s.order_id,
+    dc.customer_key,
+    dp.product_key,
+    dl.location_key,
+    dd.date_key,
+    s.sales,
+    s.quantity,
+    s.discount,
+    s.profit,
+    s.shipping_cost
+FROM superstore_catalog.superstore_db.silver_superstore s
+JOIN superstore_catalog.superstore_db.dim_customer dc
+    ON s.customer_id = dc.customer_id
+JOIN superstore_catalog.superstore_db.dim_product dp
+    ON s.product_id = dp.product_id
+JOIN superstore_catalog.superstore_db.dim_location dl
+    ON s.country = dl.country
+    AND s.city = dl.city
+JOIN superstore_catalog.superstore_db.dim_date dd
+    ON s.order_date = dd.date_key;

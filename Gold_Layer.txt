@@ -1,0 +1,130 @@
+USE CATALOG superstore_catalog;
+USE SCHEMA superstore_db;
+
+-- dim_customer
+CREATE OR REPLACE TABLE superstore_catalog.superstore_db.dim_customer
+USING DELTA
+AS
+SELECT
+    ROW_NUMBER() OVER (ORDER BY customer_id) AS customer_key,
+    customer_id,
+    customer_name,
+    segment
+FROM (
+    SELECT DISTINCT 
+        customer_id, 
+        customer_name, 
+        segment
+    FROM superstore_catalog.superstore_db.silver_superstore
+) t;
+
+
+select * from superstore_catalog.superstore_db.dim_customer LIMIT 5;
+
+
+-- dim_product
+
+CREATE OR REPLACE TABLE superstore_catalog.superstore_db.dim_product
+USING DELTA
+AS
+SELECT
+    ROW_NUMBER() OVER (ORDER BY product_id) AS product_key,
+    product_id,
+    product_name,
+    category,
+    sub_category
+FROM (
+    SELECT DISTINCT 
+        product_id, 
+        product_name, 
+        category, 
+        sub_category
+    FROM superstore_catalog.superstore_db.silver_superstore
+) t;
+
+
+select * from superstore_catalog.superstore_db.dim_product limit 5;
+
+
+--dim_location
+
+CREATE OR REPLACE TABLE superstore_catalog.superstore_db.dim_location
+USING DELTA
+AS
+SELECT
+    ROW_NUMBER() OVER (ORDER BY country, city) AS location_key,
+    country,
+    city,
+    state,
+    region,
+    postal_code
+FROM (
+    SELECT DISTINCT 
+        country, 
+        city, 
+        state, 
+        region, 
+        postal_code
+    FROM superstore_catalog.superstore_db.silver_superstore
+) t;
+
+
+Select * from superstore_catalog.superstore_db.dim_location limit 5;
+
+--dim_date
+
+CREATE OR REPLACE TABLE superstore_catalog.superstore_db.dim_date
+USING DELTA
+AS
+SELECT DISTINCT
+    order_date AS date_key,
+    YEAR(order_date) AS year,
+    MONTH(order_date) AS month,
+    DAY(order_date) AS day,
+    DATE_FORMAT(order_date, 'MMMM') AS month_name,
+    WEEKOFYEAR(order_date) AS week_number,
+    QUARTER(order_date) AS quarter
+FROM superstore_catalog.superstore_db.silver_superstore;
+
+
+select * from superstore_catalog.superstore_db.dim_date limit 5;
+
+
+--Facte Table
+
+CREATE OR REPLACE TABLE superstore_catalog.superstore_db.fact_sales
+USING DELTA
+AS
+SELECT
+    s.order_id,
+    dc.customer_key,
+    dp.product_key,
+    dl.location_key,
+    dd.date_key,
+    s.sales,
+    s.quantity,
+    s.discount,
+    s.profit,
+    s.shipping_cost
+FROM superstore_catalog.superstore_db.silver_superstore s
+JOIN superstore_catalog.superstore_db.dim_customer dc
+    ON s.customer_id = dc.customer_id
+JOIN superstore_catalog.superstore_db.dim_product dp
+    ON s.product_id = dp.product_id
+JOIN superstore_catalog.superstore_db.dim_location dl
+    ON s.country = dl.country
+    AND s.city = dl.city
+JOIN superstore_catalog.superstore_db.dim_date dd
+    ON s.order_date = dd.date_key;
+
+select * from superstore_catalog.superstore_db.fact_sales limit 5;
+
+
+SELECT *
+FROM superstore_catalog.superstore_db.fact_sales
+WHERE customer_key IS NULL
+   OR product_key IS NULL
+   OR location_key IS NULL
+   OR date_key IS NULL;
+
+OPTIMIZE superstore_catalog.superstore_db.fact_sales;
